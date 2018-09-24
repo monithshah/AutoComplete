@@ -1,0 +1,27 @@
+// Place all the styles related to the Location controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+	h1 {
+		text-align: center;
+	}
+
+	.form {
+		text-align: center;
+		margin-top: 100px;
+	}
+	
+	input {
+		margin-bottom: 25px;
+		text-align: center;
+		border: 2px solid;
+		padding: 10px 10px;
+	}
+
+	#submit_button{
+		padding: 10px 30px;
+		background: #50c9e7;
+		border-radius: 15px;
+		color: #ffffff;
+		border: 0px;
+	}

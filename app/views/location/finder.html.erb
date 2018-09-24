@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<% @title = "Location Guesser" %>
+<html>
+<body>
+	<h1>An App to Autocomplete Location</h1>
+	<div class="form">
+		<form>
+			<input type="hidden" id="hidden">
+			<input type="text" id="city" placeholder="City" /> <br>
+			<input type="text" placeholder="State" id="state"> <br>
+			<input type="submit" id="submit_button" value="Submit" />
+		</form>
+	</div>
+		<%= javascript_include_tag('finder.js') %>
+</body>
+</html>
