@@ -23,7 +23,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 
-gem 'autocomplete_locations', path: '/home/monith/RailsProjects/autocomplete_locations'
+gem 'autocomplete_locations', git: 'git@github.com:elitmus/autocomplete_locations.git'
 
 gem 'geocoder', :git => 'git://github.com/alexreisner/geocoder'
 

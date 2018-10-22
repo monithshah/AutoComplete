@@ -3,14 +3,36 @@
 <html>
 <body>
 	<h1>An App to Autocomplete Location</h1>
+	<div>
+<textarea  id="area2" rows="15" class="w3-margin " style="width:100%;color:red;"  ><br> </br> </textarea></div>
+<div id="menu"  style="font-family:'Hind', sans-serif;background-color:#fff;display:inline-block;position:absolute;display:none;" class="w3-border w3-margin w3-text-black w3-margin w3-card ">
+
+<div class="word-list w3-padding-small">
+....?
+</div>
+<div class="word-list w3-padding-small">
+....?
+</div>
+<div class="word-list w3-padding-small">
+....?
+</div>
+<div class="word-list w3-padding-small">
+....?
+</div>
+<div class="word-list w3-padding-small">
+....?
+</div>
+<div class="word-list w3-padding-small">
+....?
+</div>
+</div>
 	<div class="form">
 		<form>
 			<input type="hidden" id="hidden">
-			<input type="text" id="city" placeholder="City" /> <br>
+			<input type="text" id="city" placeholder="City"/> <br>
 			<input type="text" placeholder="State" id="state"> <br>
 			<input type="submit" id="submit_button" value="Submit" />
 		</form>
 	</div>
-		<%= javascript_include_tag('finder.js') %>
-</body>
+
 </html>
