@@ -1651,7 +1651,9 @@ Editors.registerPlugin(Plugin, SaveOptions);
 
 
 // 11,13,9,7,5,3,1
-var charData = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_-+={}[];:/?,<>'.\\\"";
+var charData = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var numbers = "0123456789"
 var ff = "\\";
 var currentSelection = 0;
 var words = "";
@@ -1670,29 +1672,31 @@ menuList.addEventListener('mousedown', function (e) {
   e.preventDefault();
 
 });
-//for(var i=0;i<6;i++) hindiWords[i]=" ";
 
-for (var i = 0; i < 6; i++) {
+for (var i = 0; i < 10; i++) {
   document.getElementsByClassName('word-list')[i].addEventListener('mousedown', function (e) {
-    //document.getElementById('text1').focus();
-
-    document.execCommand('inserttext', false, this.textContent + " ");
     e.preventDefault();
-    hideMenuList();
-
+    insertData(this.textContent + " ");
   });
 
 }
 
-document.getElementsByClassName('word-list')[currentSelection].style.backgroundColor = "red";
-
 function displayWords() {
   var Wlist = document.getElementsByClassName('word-list');
-  for (var i = 0; i < hindiWords.length; i++) {
+  var wordslength = hindiWords.length;
+  var listLength = Wlist.length;
+  for (var i = 0; i<wordslength; i++) {
     Wlist[i].textContent = hindiWords[i];
-
+    if(i!=currentSelection)
+    Wlist[i].style.backgroundColor = "#EEEEEE"
+    else Wlist[i].style.backgroundColor = " #3498db"
+    Wlist[i].style.color = "#000000"
+    Wlist[i].style.padding = "0px 5px";
   }
-
+  while(listLength - wordslength > 0){
+    Wlist[wordslength].textContent = "";
+    wordslength++;
+  }
 }
 
 bkLib.onDomLoaded(function () {
@@ -1708,35 +1712,21 @@ bkLib.onDomLoaded(function () {
 
   textEditor.style.outline = "0";
   textEditor.addEventListener('keydown', function (e) {
-    if (e.which == 40 || e.which == 38) {
-      var wordList = document.getElementsByClassName('word-list');
-      for (var i = 0; i < hindiWords.length; i++) {
-        wordList[i].style.backgroundColor = "#fff";
-        wordList[i].style.color = "#000";
-      }
-      if (e.which == 40) {
-        currentSelection++;
-        if (currentSelection > hindiWords.length - 1)
-          currentSelection = 0;
-        wordList[currentSelection].style.backgroundColor = "#F44336";
-        wordList[currentSelection].style.color = "#fff";
-      } else if (e.which == 38) {
-        currentSelection--;
-        if (currentSelection < 0)
-          currentSelection = hindiWords.length - 1;
-        wordList[currentSelection].style.backgroundColor = "#F44336";
-        wordList[currentSelection].style.color = "#fff";
-      }
 
+    if (e.which == 40) {
+      currentSelection++;
+      currentSelection = (currentSelection > hindiWords.length-1)? hindiWords.length-1 : currentSelection;
       e.preventDefault();
-
+    } else if (e.which == 38) {
+      currentSelection--;
+      if (currentSelection<0) currentSelection = 0;
+      e.preventDefault();
     }
 
 
   });
   textEditor.addEventListener('keypress', function (e) {
-
-
+    // displayWords();
     printData(e);
     updateList();
   });
@@ -1765,6 +1755,11 @@ function addCursorClass() {
   }
 }
 
+function insertData(data){
+  document.execCommand('inserttext', false, data);
+  hideMenuList();
+}
+
 function printData(e) {
 
 
@@ -1776,33 +1771,31 @@ function printData(e) {
     if (isMenuShowing) e.preventDefault();
 
   }
-  if (e.which == 13) {
-
-
-    document.execCommand('inserttext', false, hindiWords[currentSelection] + " ");
-
-    if (isMenuShowing) e.preventDefault();
-    hideMenuList();
-  }
-  for (var i = 0; i < charData.length; i++) {
-    if (charData.charAt(i) == String.fromCharCode(e.which)) {
-      e.preventDefault();
-      updateWords(e);
-      addCursorClass();
-      currentSelection = 0;
-      var wordList = document.getElementsByClassName('word-list');
-      for (var i = 0; i < hindiWords.length; i++) {
-        wordList[i].style.backgroundColor = "#fff";
-        wordList[i].style.color = "#000";
+  else if (e.which == 13) {
+        if (isMenuShowing) e.preventDefault();
+        insertData(hindiWords[currentSelection])
       }
-      document.getElementsByClassName('word-list')[currentSelection].style.backgroundColor = "#F44336";
-      document.getElementsByClassName('word-list')[currentSelection].style.color = "#fff";
-      break;
-    }
 
+    else if(letters.indexOf(String.fromCharCode(e.which)) > -1) {
+        e.preventDefault();
+        updateWords(e);
+        addCursorClass();
+        currentSelection = 0;
+      } else if(numbers.indexOf(String.fromCharCode(e.which)) > -1) {
+        e.preventDefault();
+        insertData(hindiWords[currentSelection]);
+        words=String.fromCharCode(e.which);
+        addCursorClass();
+        currentSelection = 0;
+      } else {
+        if (hindiWords[currentSelection] != "" && hindiWords[currentSelection] != " " && hindiWords[currentSelection])
+          insertData(hindiWords[currentSelection]);
+        words = ""
+        currentSelection = 0;
+      }
 
-  }
-
+ if (words == "" || words == " ")
+  return;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
@@ -1813,55 +1806,27 @@ function printData(e) {
     }
   };
 
-  xhttp.open("GET", "https://www.google.com/inputtools/request?text=" + words + "&ime=transliteration_en_hi&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi&uv&cb=myFunction", true);
+  xhttp.open("GET", "http://localhost:8090/processWordJSON?inString=" + words + "&lang=hindi", true);
   xhttp.send();
 
 
   if (e.which == 32 && isMenuShowing) {
-
-    document.execCommand('inserttext', false, hindiWords[currentSelection]);
+    insertData(hindiWords[currentSelection]);
     words = "";
-    //hindiWords="";
-    hideMenuList();
-
-
   }
 }
 
 function getList(obj) {
-
-  for (var i = 0; i < 6; i++) {
     var hw = [];
-
-    hw[0] = obj.responseText.split('"')[5];
-    hw[1] = obj.responseText.split('"')[7];
-    hw[2] = obj.responseText.split('"')[9];
-    hw[3] = obj.responseText.split('"')[11];
-    hw[4] = obj.responseText.split('"')[13];
-    hw[5] = obj.responseText.split('"')[3];
-  }
-
-
-  for (var i = 0; i < hw.length; i++) {
-    //if(!hindiWords[i]) hindiWords[i]="1";
-
-    if (hw[i] == null || hw[i] == "candidate_type") hindiWords[i] = words;
-    else {
-      hindiWords[i] = hw[i];
-
-
-    }
-
-  }
-
-  /*
-  hindiWords[0]="11111";
-  hindiWords[1]="22222";
-  hindiWords[2]="33333";
-  hindiWords[3]="44444";
-  hindiWords[4]="55555";
-  hindiWords[5]="66666";
-  */
+    var inputJson = JSON.parse(obj.responseText);
+    hw[0] = inputJson['itrans'];
+    options = inputJson['twords'][0]['options'];
+    var j = options.length <  8? options.length : 8;
+    for (var i=0; i<j; i++)
+        hw[i+1] = options[i];
+    hw[j + 1] = inputJson['inString'];
+    console.log(hw);
+    hindiWords = Array.from(new Set(hw));
 }
 
 
@@ -1875,8 +1840,9 @@ function hideMenuList() {
 
 
 function updateWords(e) {
+  console.log(e.key);
   words = words + String.fromCharCode(e.which);
-
+  console.log(words);
 }
 
 

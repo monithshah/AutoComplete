@@ -1,7 +1,7 @@
 class LocationController < ApplicationController
 
-  def finder
-    @java = "finder.js"
+  def text_editor
+    @java = 'finder.js'
   end
 
 end

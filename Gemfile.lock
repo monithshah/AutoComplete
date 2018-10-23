@@ -4,12 +4,6 @@ GIT
   specs:
     geocoder (1.5.0)
 
-GIT
-  remote: git@github.com:elitmus/autocomplete_locations.git
-  revision: 085e5bd5bdf13c352b984fbb24e3e8adf31e7cc2
-  specs:
-    autocomplete_locations (0.2.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -213,7 +207,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autocomplete_locations!
   bootsnap (>= 1.1.0)
   byebug
   capybara (>= 2.15)

@@ -14,11 +14,9 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require jquery-ui 
+//= require jquery-ui
 
 //= require activestorage
 //= require turbolinks
 //= require_tree .
-
-//= require autocomplete_locations/location_autocomplete
 
